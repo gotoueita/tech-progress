@@ -1,0 +1,218 @@
+---
+export const prerender = true;
+
+import path from "node:path";
+import { readFile, stat } from "node:fs/promises";
+
+import { parseCSV } from "../../lib/csv";
+import { renderMarkdownToSafeHtml } from "../../lib/markdown";
+
+type TechRow = ReturnType<typeof parseCSV>[number];
+
+function starLen(s?: string | null) {
+  return (s ?? "").toString().length;
+}
+
+// 先頭frontmatter(--- ... ---)を除去
+function stripFrontmatter(md: string) {
+  const text = (md ?? "").replace(/^\uFEFF/, ""); // BOM対策
+  if (!text.startsWith("---\n") && !text.startsWith("---\r\n")) return text;
+
+  // 2つ目の --- を探す（行頭の ---）
+  const m = text.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n/);
+  if (m) return text.slice(m[0].length);
+  return text; // 変則ケースはそのまま
+}
+
+export async function getStaticPaths() {
+  const csvPath = path.join(process.cwd(), "data", "tech.csv");
+  const csvText = await readFile(csvPath, "utf-8");
+  const tech = parseCSV(csvText) as TechRow[];
+
+  const slugs = Array.from(
+    new Set(tech.map((t) => (t.slug ?? "").trim()).filter((s) => s.length > 0))
+  );
+
+  return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+
+const csvPath = path.join(process.cwd(), "data", "tech.csv");
+const csvText = await readFile(csvPath, "utf-8");
+const tech = parseCSV(csvText) as TechRow[];
+
+const row = tech.find((t) => (t.slug ?? "").trim() === slug);
+if (!row) return new Response(null, { status: 404 });
+
+const category = row.category ?? "その他";
+
+// 同カテゴリ内並び（indexと同じ）
+const sameCategory = tech
+  .filter((t) => (t.category ?? "その他") === category)
+  .filter((t) => ((t.slug ?? "").trim().length > 0))
+  .slice()
+  .sort((a, b) => {
+    const sa = starLen(a.near);
+    const sb = starLen(b.near);
+    if (sb !== sa) return sb - sa;
+    return (a.title ?? "").localeCompare(b.title ?? "");
+  });
+
+const idx = sameCategory.findIndex((t) => (t.slug ?? "").trim() === slug);
+const prev = idx > 0 ? sameCategory[idx - 1] : null;
+const next = idx >= 0 && idx < sameCategory.length - 1 ? sameCategory[idx + 1] : null;
+
+let mdExists = false;
+let mdHtml = "";
+
+if (slug) {
+  const cat = (row.category ?? "その他").trim();
+  const categoryDir =
+    cat === "エネルギー" ? "energy" :
+    cat === "環境" ? "environment" :
+    cat === "医療" ? "medical" :
+    cat === "食" ? "food" :
+    cat === "情報" ? "info" :
+    "misc";
+
+  try {
+    const mdPath = path.join(process.cwd(), "content", "tech", categoryDir, `${slug}.md`);
+    await stat(mdPath);
+    mdExists = true;
+
+    const raw = await readFile(mdPath, "utf-8");
+    const bodyOnly = stripFrontmatter(raw);   // ★ここがポイント
+    mdHtml = renderMarkdownToSafeHtml(bodyOnly);
+  } catch {
+    mdExists = false;
+  }
+}
+
+const linkOf = (t: any) => `/tech/${(t.slug ?? "").trim()}`;
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{row.title}｜生活を変える技術 進捗ボード</title>
+  </head>
+
+  <body>
+    <div class="layout">
+      <main class="main">
+        <a class="back" href="/">← 一覧へ戻る</a>
+
+        <h1>{row.title}</h1>
+
+        <div class="meta">
+          <span class="pill">{category}</span>
+          {row.near && <span class="pill strong">{row.near}</span>}
+          {row.eta && <span class="pill">{row.eta}</span>}
+        </div>
+
+        <nav class="pager">
+          {prev && <a href={linkOf(prev)}>← {prev.title}</a>}
+          {next && <a href={linkOf(next)}>{next.title} →</a>}
+        </nav>
+
+        <section class="card">
+          <h2>詳細</h2>
+          {mdExists ? (
+            <article class="md" set:html={mdHtml} />
+          ) : (
+            <p class="missing">Markdown未作成</p>
+          )}
+        </section>
+      </main>
+
+      <aside class="side">
+        <div class="sideCard">
+          <h3>{category}</h3>
+          <ul>
+            {sameCategory.map((t) => {
+              const isCurrent = (t.slug ?? "").trim() === slug;
+              return (
+                <li>
+                  <a href={linkOf(t)} class={isCurrent ? "current" : ""}>
+                    {t.near} {t.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <style>
+      :global(body){
+        margin:0;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+        background:#fafafa;
+        color:#111;
+        line-height:1.6;
+      }
+      .layout{
+        display:grid;
+        grid-template-columns: 1fr;
+        gap:24px;
+        max-width:1200px;
+        margin:0 auto;
+        padding:20px;
+      }
+      @media(min-width:1000px){
+        .layout{ grid-template-columns: 3fr 1fr; }
+      }
+      .main h1{ margin:10px 0 6px; font-size:24px; }
+      .meta{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+      .pill{
+        font-size:12px;
+        font-weight:700;
+        padding:3px 8px;
+        border-radius:999px;
+        background:#fff;
+        border:1px solid #e6e6e6;
+      }
+      .pill.strong{ background:#eef2ff; border-color:#c7d2fe; }
+      .pager{
+        display:flex;
+        justify-content:space-between;
+        margin-bottom:16px;
+        font-weight:700;
+      }
+      .card{
+        background:#fff;
+        border:1px solid #e6e6e6;
+        border-radius:12px;
+        padding:14px;
+        margin-bottom:14px;
+      }
+      .sideCard{
+        background:#fff;
+        border:1px solid #e6e6e6;
+        border-radius:12px;
+        padding:14px;
+        position:sticky;
+        top:20px;
+      }
+      .sideCard h3{ margin:0 0 10px; font-size:14px; }
+      .sideCard ul{ list-style:none; padding:0; margin:0; }
+      .sideCard li{ margin:6px 0; }
+      .sideCard a{ text-decoration:none; color:#333; font-size:13px; }
+      .sideCard a.current{ font-weight:900; color:#000; }
+      .sideCard a:hover{ text-decoration:underline; }
+      .missing{ color:#777; font-style:italic; }
+      .md :global(p){ margin:8px 0; }
+      .md :global(ul), .md :global(ol){ padding-left:20px; }
+      .md :global(pre){
+        background:#0b1020;
+        color:#fff;
+        padding:12px;
+        border-radius:12px;
+        overflow:auto;
+      }
+    </style>
+  </body>
+</html>

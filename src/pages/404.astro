@@ -1,0 +1,50 @@
+---
+const pathName = Astro.url?.pathname ?? "";
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404｜生活を変える技術 進捗ボード</title>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <h1>404</h1>
+        <p>ページが見つかりませんでした。</p>
+        <p class="small">Requested: <code>{pathName}</code></p>
+        <a class="back" href="/">← 一覧へ戻る</a>
+      </div>
+    </div>
+
+    <style>
+      :global(body){
+        margin:0;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+        background:#fafafa;
+        color:#111;
+        line-height:1.6;
+      }
+      .wrap{max-width:900px;margin:0 auto;padding:24px;}
+      .card{
+        background:#fff;
+        border:1px solid #e6e6e6;
+        border-radius:14px;
+        padding:18px;
+        box-shadow:0 1px 0 rgba(0,0,0,0.02);
+      }
+      h1{margin:0 0 8px;font-size:26px;}
+      .small{color:#666;font-size:12px;}
+      .back{
+        display:inline-block;
+        margin-top:12px;
+        color:#333;
+        text-decoration:none;
+        font-weight:800;
+      }
+      .back:hover{text-decoration:underline;}
+      code{background:#f3f4f6;padding:2px 6px;border-radius:8px;}
+    </style>
+  </body>
+</html>

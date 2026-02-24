@@ -34,11 +34,9 @@ const normalize = (s?: string | null) =>
   (s ?? "").toString().replace(/\r\n/g, "\n").trim();
 
 
+// 一覧用：最大120文字に丸める
 const short = (s?: string | null, n: number = 120) => {
-  const t = normalize(s)
-    .replace(/\n+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  const t = normalize(s);
   if (!t) return "";
   return t.length > n ? t.slice(0, n) + "…" : t;
 };
