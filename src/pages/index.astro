@@ -1,5 +1,5 @@
----
-import path from "node:path";
+nano 
+--- import path from "node:path";
 import { readFile, stat } from "node:fs/promises";
 import { parseCSV } from "../lib/csv";
 
@@ -205,10 +205,15 @@ const getSummary = (cat?: string | null, slug?: string | null): Summary => {
 ---
 
 <html lang="ja">
-  <head>
+  
+
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>生活を変える技術 進捗ボード</title>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" 
+data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
   </head>
 
   <body>
@@ -216,7 +221,7 @@ const getSummary = (cat?: string | null, slug?: string | null): Summary => {
       <header class="head">
         <h1>生活を変える技術 進捗ボード</h1>
         <p class="legend">★は現在地の目安（★★★＝実装拡大、★★＝実証段階、★＝研究段階）</p>
-        <p class="note">「生活変化・固まった成果・残課題・観測ポイント」を一覧化（OSINTベース）</p>
+        <p class="note">「生活変化・現状の成果・残課題・観測ポイント」を一覧化（OSINTベース）</p>
       </header>
 
       {categories.map((cat) => {
