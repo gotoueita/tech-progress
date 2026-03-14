@@ -42,3 +42,20 @@ tmp/
 # snapshots
 *snapshot*
 
+
+# backups
+*.bak
+*.bak*
+*.backup
+*.backup*
+*.stage2.bak
+
+# templates
+_template.md
+
+# tmp
+tmp/
+
+# debug / snapshots
+debug_*
+*snapshot*
