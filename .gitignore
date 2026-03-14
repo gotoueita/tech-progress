@@ -22,3 +22,23 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+.snapshots
+node_modules
+
+# backups
+*.bak
+*.backup*
+*.backup
+
+# debug
+debug_*
+
+# tmp
+tmp/
+
+# templates
+*_template.md
+
+# snapshots
+*snapshot*
+

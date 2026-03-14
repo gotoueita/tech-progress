@@ -1,0 +1,140 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props {
+  body: string;
+}
+
+const { body } = Astro.props;
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function extractSection(markdown: string, heading: string): string {
+  const normalized = markdown.replace(/\r\n/g, "\n");
+  const pattern = new RegExp(
+    `^##\\s+${escapeRegExp(heading)}\\s*\\n([\\s\\S]*?)(?=^##\\s+|\\Z)`,
+    "m"
+  );
+  const match = normalized.match(pattern);
+  return match ? match[1].trim() : "";
+}
+
+function extractBulletItems(markdown: string, heading: string): string[] {
+  const section = extractSection(markdown, heading);
+  if (!section) return [];
+
+  return section
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => /^-\s+/.test(line))
+    .map((line) => line.replace(/^-\s+/, "").trim())
+    .filter(Boolean);
+}
+
+const dependencyItems = extractBulletItems(body, "依存技術");
+const relatedItems = extractBulletItems(body, "関連技術");
+const timelineItems = extractBulletItems(body, "技術タイムライン");
+
+const allEntries = await getCollection("tech");
+
+const titleToSlug = new Map(
+  allEntries.map((entry) => [entry.data.title.trim(), entry.slug])
+);
+
+function resolveLink(item: string) {
+  const slug = titleToSlug.get(item.trim());
+  return slug ? `/tech/${slug}` : null;
+}
+
+const hasStructuredSections =
+  dependencyItems.length > 0 ||
+  relatedItems.length > 0 ||
+  timelineItems.length > 0;
+---
+
+{hasStructuredSections && (
+  <section class="structured-sections" aria-label="構造化セクション">
+    {dependencyItems.length > 0 && (
+      <section class="structured-card" aria-labelledby="deps-title">
+        <h2 id="deps-title">依存技術</h2>
+        <ul>
+          {dependencyItems.map((item) => {
+            const href = resolveLink(item);
+            return (
+              <li>
+                {href ? <a href={href}>{item}</a> : <span>{item}</span>}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    )}
+
+    {relatedItems.length > 0 && (
+      <section class="structured-card" aria-labelledby="related-title">
+        <h2 id="related-title">関連技術</h2>
+        <ul>
+          {relatedItems.map((item) => {
+            const href = resolveLink(item);
+            return (
+              <li>
+                {href ? <a href={href}>{item}</a> : <span>{item}</span>}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    )}
+
+    {timelineItems.length > 0 && (
+      <section class="structured-card" aria-labelledby="timeline-title">
+        <h2 id="timeline-title">技術タイムライン</h2>
+        <ul>
+          {timelineItems.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+    )}
+  </section>
+)}
+
+<style>
+  .structured-sections {
+    display: grid;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .structured-card {
+    border: 1px solid #d7dce5;
+    border-radius: 12px;
+    background: #f8fafc;
+    padding: 1rem 1.2rem;
+  }
+
+  .structured-card h2 {
+    margin: 0 0 0.8rem;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .structured-card ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  .structured-card li {
+    margin: 0.45rem 0;
+    line-height: 1.7;
+  }
+
+  .structured-card a {
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .structured-card a:hover {
+    text-decoration: underline;
+  }
+</style>

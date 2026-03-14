@@ -7,6 +7,8 @@ export type TechRow = {
   open_issues: string;
   watch_next: string;
   eta: string;
+  milestone?: string;
+  players?: string;
 };
 
 export function parseCSV(text: string): TechRow[] {

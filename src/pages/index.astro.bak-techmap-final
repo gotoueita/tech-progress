@@ -225,9 +225,6 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
         <p class="note">生活変化・現状の成果・実用化の壁・今後の注目点・目安 を整理した進捗ボード</p>
       </header>
 
-  <TechMap items={tech.map((item) => ({ slug: item.slug, title: item.title, category: item.category }))} />
-
-
       {categories.map((cat) => {
         const rows = groups.get(cat)!;
         const total = rows.length;
@@ -258,8 +255,6 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
                     <th class="colNow">現状の成果</th>
                     <th class="colOpen">実用化の壁</th>
                     <th class="colWatch">今後の注目点</th>
-<th>最新マイルストーン</th>
-                    <th>主要プレイヤー</th>
                     <th class="colEta">目安</th>
                   </tr>
                 </thead>
@@ -313,8 +308,6 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
                         <td>{renderBlocks(nowBlocks)}</td>
                         <td>{renderBlocks(openBlocks)}</td>
                         <td>{renderBlocks(watchBlocks)}</td>
-                        <td>{t.milestone ?? ""}</td>
-                        <td>{t.players ?? ""}</td>
                         <td class="eta">{t.eta}</td>
                       </tr>
                     );
