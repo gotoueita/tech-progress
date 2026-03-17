@@ -34,7 +34,6 @@ const categories = Array.from(groups.keys()).sort((a, b) => a.localeCompare(b));
 const normalize = (s?: string | null) =>
   (s ?? "").toString().replace(/\r\n/g, "\n").trim();
 
-
 const short = (s?: string | null, n: number = 120) => {
   const t = normalize(s)
     .replace(/\n+/g, " ")
@@ -43,6 +42,7 @@ const short = (s?: string | null, n: number = 120) => {
   if (!t) return "";
   return t.length > n ? t.slice(0, n) + "…" : t;
 };
+
 // 一覧用：Markdown“っぽく”描画（安全：HTMLは使わない）
 const toBlocks = (s?: string | null) => {
   const text = normalize(s);
@@ -147,7 +147,6 @@ function parseFrontmatter(md: string): Record<string, string> {
     if (!mm) continue;
     const key = mm[1];
     let val = mm[2].trim();
-    // "..." を外す（簡易）
     if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
     out[key] = val;
   }
@@ -206,15 +205,14 @@ const getSummary = (cat?: string | null, slug?: string | null): Summary => {
 ---
 
 <html lang="ja">
-  
-
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>人類の生活を大きく変えうる近未来技術　進捗ボード</title>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js" 
-data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
   </head>
 
   <body>
@@ -225,8 +223,7 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
         <p class="note">生活変化・現状の成果・実用化の壁・今後の注目点・目安 を整理した進捗ボード</p>
       </header>
 
-  <TechMap items={tech.map((item) => ({ slug: item.slug, title: item.title, category: item.category }))} />
-
+      <TechMap items={tech.map((item) => ({ slug: item.slug, title: item.title, category: item.category }))} />
 
       {categories.map((cat) => {
         const rows = groups.get(cat)!;
@@ -258,8 +255,8 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
                     <th class="colNow">現状の成果</th>
                     <th class="colOpen">実用化の壁</th>
                     <th class="colWatch">今後の注目点</th>
-<th>最新マイルストーン</th>
-                    <th>主要プレイヤー</th>
+                    <th class="colMilestone">最新マイルストーン</th>
+                    <th class="colPlayers">主要プレイヤー</th>
                     <th class="colEta">目安</th>
                   </tr>
                 </thead>
@@ -272,7 +269,6 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
 
                     const s = getSummary(t.category ?? null, slug);
 
-                    // frontmatter優先（CSVに同列が無くてもOK）
                     const lifeBlocks = toBlocks(short(s.life_change));
                     const nowBlocks = toBlocks(short(s.solid_result));
                     const openBlocks = toBlocks(short(s.remaining_issues));
@@ -336,7 +332,11 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
         color: #111;
       }
 
-      .wrap { max-width: 1200px; margin: 0 auto; padding: 20px; }
+      .wrap {
+        width: min(96vw, 1880px);
+        margin: 0 auto;
+        padding: 20px 12px 28px;
+      }
 
       .head { margin-bottom: 12px; }
       h1 { font-size: 28px; margin: 0 0 6px; }
@@ -351,6 +351,7 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
         border-radius: 12px;
         padding: 10px 12px;
       }
+
       .band h2 {
         margin: 0;
         font-size: 16px;
@@ -387,13 +388,20 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
         box-shadow: 0 1px 0 rgba(0,0,0,0.02);
       }
 
-      table { border-collapse: collapse; width: 100%; min-width: 980px; }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 1680px;
+        table-layout: fixed;
+      }
+
       thead th {
-        position: sticky; top: 0;
+        position: sticky;
+        top: 0;
         background: #f6f6f6;
         border-bottom: 1px solid #e6e6e6;
         text-align: left;
-        padding: 10px;
+        padding: 10px 8px;
         font-size: 13px;
         color: #333;
         white-space: nowrap;
@@ -402,22 +410,53 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
 
       tbody td {
         border-bottom: 1px solid #f0f0f0;
-        padding: 10px;
+        padding: 10px 8px;
         vertical-align: top;
         font-size: 14px;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
+
       tbody tr:hover { background: #fcfcfc; }
 
-      .colNear { width: 70px; }
-      .colTitle { width: 240px; }
-      .colEta { width: 120px; }
+      .colNear { width: 72px; }
+      .colTitle { width: 220px; }
+      .colLife { width: 220px; }
+      .colNow { width: 220px; }
+      .colOpen { width: 220px; }
+      .colWatch { width: 220px; }
+      .colMilestone { width: 170px; }
+      .colPlayers { width: 170px; }
+      .colEta { width: 110px; }
 
-      .near { font-weight: 800; white-space: nowrap; letter-spacing: 1px; }
-      .eta { white-space: nowrap; font-weight: 700; color: #333; }
+      .near {
+        font-weight: 800;
+        white-space: nowrap;
+        letter-spacing: 1px;
+      }
 
-      .title { min-width: 220px; }
-      .titleRow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-      .sub { font-size: 11px; color: #777; margin-top: 4px; }
+      .eta {
+        white-space: nowrap;
+        font-weight: 700;
+        color: #333;
+      }
+
+      .title {
+        min-width: 0;
+      }
+
+      .titleRow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .sub {
+        font-size: 11px;
+        color: #777;
+        margin-top: 4px;
+      }
 
       .link {
         color: inherit;
@@ -425,8 +464,13 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
         border-bottom: 1px dotted #aaa;
         font-weight: 800;
       }
+
       .link:hover { border-bottom-style: solid; }
-      .nolink { font-weight: 800; color: #333; }
+
+      .nolink {
+        font-weight: 800;
+        color: #333;
+      }
 
       .badgeMissing {
         font-size: 11px;
@@ -439,11 +483,27 @@ data-cf-beacon='{"token":"6ed43d34957a49fcb90ec8e43f7db523"}'></script>
         white-space: nowrap;
       }
 
-      .cell { display: grid; gap: 6px; }
+      .cell {
+        display: grid;
+        gap: 6px;
+      }
+
       .p { margin: 0; }
       .ul, .ol { margin: 0; padding-left: 18px; }
       .ul li, .ol li { margin: 2px 0; }
       .dim { color: #888; }
+
+      @media (max-width: 900px) {
+        .wrap {
+          width: 100%;
+          padding: 16px 10px 24px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+      }
     </style>
   </body>
 </html>
+EOF

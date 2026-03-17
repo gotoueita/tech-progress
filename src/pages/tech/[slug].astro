@@ -165,7 +165,7 @@ const linkOf = (t: any) => `/tech/${(t.slug ?? "").trim()}`;
       @media(min-width:1000px){
         .layout{ grid-template-columns: 3fr 1fr; }
       }
-      .main h1{ margin:10px 0 6px; font-size:24px; }
+      .main h1{ margin:10px 0 6px; font-size:22px; font-weight:700; line-height:1.4; }
       .meta{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
       .pill{
         font-size:12px;
@@ -204,6 +204,11 @@ const linkOf = (t: any) => `/tech/${(t.slug ?? "").trim()}`;
       .sideCard a.current{ font-weight:900; color:#000; }
       .sideCard a:hover{ text-decoration:underline; }
       .missing{ color:#777; font-style:italic; }
+      .md{
+        font-size:16px;
+        font-weight:400;
+        line-height:1.9;
+      }
       .md :global(p){ margin:8px 0; }
       .md :global(ul), .md :global(ol){ padding-left:20px; }
       .md :global(pre){
