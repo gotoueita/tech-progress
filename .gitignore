@@ -59,3 +59,17 @@ tmp/
 # debug / snapshots
 debug_*
 *snapshot*
+
+# macOS
+.DS_Store
+
+# archive / temp / backups
+archive/
+backup/
+tmp/
+*.bak
+*.bak2
+*.bak-*
+*.backup-*
+*.stage3.bak
+

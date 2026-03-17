@@ -1,0 +1,94 @@
+---
+const title = "お問い合わせ";
+const contactEmail = "techprogress.board@gmail.com";
+---
+
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>{title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+margin:0;
+font-family:ui-sans-serif,system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+background:#fafafa;
+color:#111;
+line-height:1.7;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:40px 20px;
+}
+
+h1{
+font-size:28px;
+margin-bottom:20px;
+}
+
+h2{
+margin-top:40px;
+font-size:20px;
+}
+
+p{
+margin:12px 0;
+}
+
+a{
+color:#2563eb;
+text-decoration:none;
+}
+
+a:hover{
+text-decoration:underline;
+}
+
+.box{
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>お問い合わせ</h1>
+
+<p>
+本サイトに関するご意見、ご指摘、掲載内容の修正提案、
+引用・紹介のご相談などは、以下の連絡先までお願いいたします。
+</p>
+
+<div class="box">
+<p><strong>連絡先メールアドレス</strong><br>
+<a href={"mailto:" + contactEmail}>{contactEmail}</a></p>
+</div>
+
+<h2>ご連絡内容の例</h2>
+
+<p>
+・掲載内容の誤りや更新提案<br>
+・参考情報のご連絡<br>
+・サイト紹介、引用、掲載相談
+</p>
+
+<h2>注意事項</h2>
+
+<p>
+内容によっては返信できない場合があります。あらかじめご了承ください。
+</p>
+
+</div>
+
+</body>
+</html>
