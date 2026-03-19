@@ -1,19 +1,19 @@
 slug,near,title,category,eta,milestone,players
 quantum-computing,★★,量子コンピュータ,情報,10〜20年,2023：Google量子計算のエラー訂正実験進展,IBM / Google / IonQ / Rigetti
-fusion-energy,★,核融合エネルギー,エネルギー,20年以上,,
-regenerative-medicine,★★,再生医療,医療,10年以上,,
-solid-state-battery,★★,全固体電池,エネルギー,5〜10年,,
-carbon-capture-dac,★★,CO2直接回収（DAC）,環境,10〜20年,,
-cultured-meat,★★,培養肉,食,5〜15年,,
-small-modular-reactor,★,小型モジュール炉（SMR）,エネルギー,10年以上,,
-ai-accelerator-chip,★★★,AI推論専用チップ,情報,すでに実装拡大中,,
-next-gen-semiconductor,★★★,次世代半導体（2nm以降）,情報,すでに実装拡大中,,
-privacy-preserving-ai,★★,プライバシー保護AI（連合学習など）,情報,5〜10年,,
-mrna-applications,★★,mRNA応用（がん等）,医療,5〜10年,,
-crispr-therapy,★★,CRISPR治療,医療,5〜15年,,
-precision-fermentation,★★,精密発酵（代替タンパク）,食,5〜10年,,
-drought-resilient-crops,★★,耐乾燥・高収量作物,食,5〜10年,,
-desalination,★★,海水淡水化（省エネ化）,環境,すでに拡大中,,
-direct-lithium-extraction,★★,リチウム直接抽出（DLE）,環境,5〜15年,,
-perovskite-solar,★★,ペロブスカイト太陽電池,エネルギー,5〜10年,,
-genome-edited-food,★★,ゲノム編集食品,食,5〜10年,,
+fusion-energy,★,核融合エネルギー,エネルギー,20年以上,2023：米国で正味エネルギー増幅の点火達成（NIF）,ITER / NIF / Commonwealth Fusion Systems
+regenerative-medicine,★★,再生医療,医療,10年以上,2024：iPS細胞由来製品や再生医療等製品の実用化が継続拡大,大学病院 / バイオ企業 / 製薬企業
+solid-state-battery,★★,全固体電池,エネルギー,5〜10年,2020年代後半：自動車向け量産計画が各社で進行,トヨタ / 日産 / Honda / QuantumScape
+carbon-capture-dac,★★,CO2直接回収（DAC）,環境,10〜20年,2020年代：商用実証プラントの建設が進展,Climeworks / Carbon Engineering / 1PointFive
+cultured-meat,★★,培養肉,食,5〜15年,2023：一部地域で販売承認や試験提供が進展,Upside Foods / GOOD Meat / Mosa Meat
+small-modular-reactor,★,小型モジュール炉（SMR）,エネルギー,10年以上,2020年代後半：各国で実証・初号機計画が進行,NuScale / Rolls-Royce SMR / GE Hitachi
+ai-accelerator-chip,★★★,AI推論専用チップ,情報,すでに実装拡大中,2020年代：生成AI需要で専用半導体の導入が急拡大,NVIDIA / AMD / Google / Intel
+next-gen-semiconductor,★★★,次世代半導体（2nm以降）,情報,すでに実装拡大中,2020年代後半：2nm世代の量産競争が本格化,TSMC / Samsung / Intel / Rapidus
+privacy-preserving-ai,★★,プライバシー保護AI（連合学習など）,情報,5〜10年,2020年代：医療・金融で実証導入が拡大,Google / NVIDIA / 医療機関 / 金融機関
+mrna-applications,★★,mRNA応用（がん等）,医療,5〜10年,2020年代：個別化がんワクチンなどの開発が進展,Moderna / BioNTech / Pfizer
+crispr-therapy,★★,CRISPR治療,医療,5〜15年,2023：CRISPR治療の初承認が大きな節目,Vertex / CRISPR Therapeutics / Intellia
+precision-fermentation,★★,精密発酵（代替タンパク）,食,5〜10年,2020年代：乳・卵代替原料の商用化が拡大,Perfect Day / EVERY / Remilk
+drought-resilient-crops,★★,耐乾燥・高収量作物,食,5〜10年,2020年代：気候変動対応品種の導入が進展,Corteva / Bayer / Syngenta
+desalination,★★,海水淡水化（省エネ化）,環境,すでに拡大中,2020年代：高効率膜や再エネ連携が進展,Veolia / Suez / DuPont
+direct-lithium-extraction,★★,リチウム直接抽出（DLE）,環境,5〜15年,2020年代：実証から商用化への移行が進展,Lilac Solutions / Standard Lithium / EnergyX
+perovskite-solar,★★,ペロブスカイト太陽電池,エネルギー,5〜10年,2020年代：軽量・曲面対応の実証が拡大,積水化学 / Oxford PV / Panasonic
+genome-edited-food,★★,ゲノム編集食品,食,5〜10年,2020年代：一部食品で流通・実証販売が進展,スタートアップ / 種苗企業 / 食品企業
